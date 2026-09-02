@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>0ms — Game Optimizer</title>
+<style>
+  :root{
+    --bg:#080b14;
+    --panel:#0e1220;
+    --panel2:#121726;
+    --line:#1e2740;
+    --pink:#FF1493;
+    --pink-dim:#FF3D8B;
+    --cyan:#22D3EE;
+    --text:#eef2ff;
+    --muted:#8b94aa;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:radial-gradient(1200px 600px at 80% -10%, #2a0f2e 0%, transparent 60%),
+               radial-gradient(900px 500px at 0% 10%, #101a2e 0%, transparent 50%),
+               var(--bg);
+    color:var(--text);
+    font-family:"Segoe UI", -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--cyan);text-decoration:none;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 22px;}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(12px);
+    background:rgba(8,11,20,.7);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .logo{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:1px;}
+  .logo .dot{width:14px;height:14px;border-radius:50%;background:var(--pink);box-shadow:0 0 14px var(--pink);}
+  .logo small{display:block;font-size:9px;font-weight:600;color:var(--pink);letter-spacing:3px;}
+  .links{display:flex;align-items:center;gap:26px;font-size:14px;font-weight:600;}
+  .links a{color:var(--text);transition:.2s;}
+  .links a:hover{color:var(--pink);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:linear-gradient(90deg,var(--pink),var(--pink-dim));
+    color:#fff;font-weight:700;font-size:14px;
+    padding:11px 20px;border-radius:11px;border:none;cursor:pointer;
+    box-shadow:0 0 22px rgba(255,20,147,.45);
+    transition:.2s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(255,20,147,.6);}
+  .btn.ghost{background:rgba(255,255,255,.06);box-shadow:none;border:1px solid var(--line);}
+  .btn.ghost:hover{background:rgba(255,20,147,.15);}
+
+  /* HERO */
+  header{padding:90px 0 60px;text-align:center;}
+  header h1{font-size:clamp(40px,7vw,72px);font-weight:900;letter-spacing:1px;}
+  header h1 span{color:var(--pink);text-shadow:0 0 30px rgba(255,20,147,.6);}
+  header .tag{color:var(--muted);font-size:clamp(16px,2vw,20px);max-width:640px;margin:18px auto 34px;}
+  .cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .badge{display:inline-block;margin-top:26px;font-size:13px;color:var(--cyan);border:1px solid var(--line);padding:8px 16px;border-radius:999px;background:var(--panel);}
+
+  /* SECTIONS */
+  section{padding:64px 0;}
+  h2{font-size:clamp(26px,4vw,38px);font-weight:800;margin-bottom:8px;text-align:center;}
+  h2 span{color:var(--pink);}
+  .sub{color:var(--muted);text-align:center;max-width:600px;margin:0 auto 46px;font-size:15px;}
+  .grid{display:grid;gap:22px;}
+  .cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;}
+  .card .ic{font-size:30px;}
+  .card h3{margin:12px 0 8px;font-size:18px;}
+  .card p{color:var(--muted);font-size:14px;}
+  .card:hover{border-color:rgba(255,20,147,.6);box-shadow:0 0 26px rgba(255,20,147,.12);}
+
+  /* feature lists */
+  .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;}
+  .cat{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;}
+  .cat h3{display:flex;align-items:center;gap:10px;font-size:18px;margin-bottom:6px;}
+  .cat h3 span{font-size:20px;}
+  .cat .count{color:var(--muted);font-size:13px;margin-bottom:14px;}
+  .cat ul{list-style:none;}
+  .cat li{font-size:13.5px;color:var(--text);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:10px;align-items:baseline;}
+  .cat li::before{content:"◆";color:var(--pink);font-size:9px;}
+
+  /* purchase */
+  .buy{background:var(--panel);border:1px solid rgba(255,20,147,.4);border-radius:22px;padding:42px;max-width:640px;margin:0 auto;text-align:center;box-shadow:0 0 40px rgba(255,20,147,.15);}
+  .buy .name{font-size:26px;font-weight:800;}
+  .buy .tagline{color:var(--muted);margin:6px 0 18px;}
+  .price{font-size:48px;font-weight:900;color:var(--pink);margin:10px 0;}
+  .price small{font-size:16px;color:var(--muted);font-weight:600;}
+  .perks{list-style:none;text-align:left;max-width:380px;margin:20px auto;font-size:14px;}
+  .perks li{margin:9px 0;display:flex;gap:10px;}
+  .perks li::before{content:"✔";color:var(--cyan);}
+  .purchase{font-size:16px;padding:15px 34px;margin-top:6px;}
+
+  .how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;counter-reset:step;}
+  .step{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:26px;position:relative;}
+  .step .n{position:absolute;top:-16px;left:22px;width:38px;height:38px;border-radius:50%;background:var(--pink);display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 0 16px rgba(255,20,147,.6);}
+  .step h3{font-size:17px;margin-bottom:8px;}
+  .step p{color:var(--muted);font-size:14px;}
+
+  /* faq */
+  .faq{max-width:760px;margin:0 auto;}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:12px;}
+  details summary{font-weight:700;cursor:pointer;font-size:15px;}
+  details p{color:var(--muted);margin-top:10px;font-size:14px;}
+
+  footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--muted);font-size:13px;}
+  footer a{color:var(--pink);}
+  .muted{color:var(--muted);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span><div>0MS<small>GAME OPTIMIZER</small></div></div>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn ghost" href="https://discord.gg/EeD4Z2xgpp">Discord</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <h1>ZERO LATENCY. <span>ZERO LIMITS.</span></h1>
+    <p class="tag">0ms is a premium Windows game optimizer — Tweak your OS for lower input lag, snappier response, and cleaner performance while you play.</p>
+    <div class="cta">
+      <a class="btn" href="#pricing">Get 0ms</a>
+      <a class="btn ghost" href="https://discord.gg/EeD4Z2xgpp">Join our Discord</a>
+    </div>
+    <div class="badge"> 79 optimizations ·  Precision tuning ·  Key remapping ·  Restore points</div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <h2>Built to <span>optimize</span> everything</h2>
+    <p class="sub">A clean, easy to use panel that stays out of your way — it runs silently from your system tray while you game.</p>
+    <div class="grid cards">
+      <div class="card"><div class="ic"></div><h3>79 Optimizations</h3><p>Power, CPU, network, visual and service tweaks — each with a one-click toggle.</p></div>
+      <div class="card"><div class="ic"></div><h3>Precision Tuning</h3><p>Slider-based controls for timer resolution, mouse hover, CPU clock and more.</p></div>
+      <div class="card"><div class="ic"></div><h3>Key Remapping</h3><p>Visual keyboard — rebind keys or build two-key macros with a custom delay.</p></div>
+      <div class="card"><div class="ic"></div><h3>Backup &amp; Restore</h3><p>One-click restore points so you can roll back any change instantly.</p></div>
+      <div class="card"><div class="ic"></div><h3>Hardware-Locked</h3><p>Your lifetime key is bound to your PC for secure, personal activation.</p></div>
+      <div class="card"><div class="ic"></div><h3>Silent Background</h3><p>Minimizes to the system tray and runs invisibly while you play.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="categories" style="padding-top:0;">
+  <div class="wrap">
+    <h2>Every <span>optimization</span></h2>
+    <p class="sub">79 tweaks across five categories, all controllable from one clean dashboard.</p>
+    <div class="cats">
+      <div class="cat"><h3></span>Core Performance</h3><div class="count">17 options</div><ul>
+        <li>High Performance Power Plan</li><li>Ultimate Performance Plan</li><li>Disable Hibernation</li><li>Disable Sleep Timeouts</li><li>Max CPU Clock (100%)</li><li>Disable USB Selective Suspend</li><li>Boost App Priority</li><li>Multimedia Timer (1ms)</li><li>Disable Disk Sleep</li><li>Large System Cache</li><li>System Responsiveness Boost</li><li>Disable Core Parking</li><li>Aggressive CPU Boost</li><li>Disable CPU Idle States</li><li>Disable Monitor Sleep</li><li>Max CPU Clock (battery)</li><li>Disable USB Suspend (battery)</li>
+      </ul></div>
+      <div class="cat"><h3></span>Input &amp; Mouse</h3><div class="count">6 options</div><ul>
+        <li>Disable Mouse Acceleration</li><li>Faster Mouse Hover</li><li>Fast Keyboard Repeat</li><li>Disable Tablet Input</li><li>Disable Sticky Keys</li><li>Fast Mouse Wheel</li>
+      </ul></div>
+      <div class="cat"><h3></span>Network</h3><div class="count">14 options</div><ul>
+        <li>Disable Nagle Algorithm</li><li>Disable Network Throttling</li><li>Fast DNS (1.1.1.1)</li><li>Flush DNS Cache</li><li>TCP Auto-Tuning (Normal)</li><li>Disable IPv6</li><li>Faster Retransmit Timer</li><li>TCP Window Scaling</li><li>Stable TTL (64)</li><li>Disable Teredo</li><li>Disable 6to4</li><li>Disable ISATAP</li><li>Flush ARP Cache</li>
+      </ul></div>
+      <div class="cat"><h3></span>Visual &amp; UI</h3><div class="count">11 options</div><ul>
+        <li>Best Visual Performance</li><li>Disable Menu Animations</li><li>Disable Transparency</li><li>Disable Taskbar Animations</li><li>Disable Window Animations</li><li>Disable Thumbnails</li><li>Disable Font Smoothing</li><li>Hide Recent Items</li><li>Compact Alt-Tab</li><li>Faster Taskbar Hover</li><li>Hide Jump Lists</li>
+      </ul></div>
+      <div class="cat"><h3></span>System &amp; Services</h3><div class="count">31 options</div><ul>
+        <li>Enable Game Mode</li><li>Disable Game DVR</li><li>Disable Background Apps</li><li>Disable SysMain (Superfetch)</li><li>Disable Windows Search</li><li>Disable Print Spooler</li><li>Disable Update Sharing</li><li>Disable Telemetry</li><li>Disable Error Reporting</li><li>Disable Bluetooth</li><li>Disable Xbox Services</li><li>Disable Remote Registry</li><li>Disable Auto Defrag</li><li>Disable Connected Devices</li><li>Disable Background Transfers</li><li>Disable Remote Desktop</li><li>Disable Fax Service</li><li>Disable Media Sharing</li><li>Disable Retail Demo</li><li>Disable Phone Service</li><li>Disable Image Acquisition</li><li>Disable Diagnostic Policy</li><li>Disable Smart Card</li><li>Disable AllJoyn Router</li><li>Disable BitLocker Service</li><li>Disable IKE/AuthIP</li><li>Disable IPv6 Helper</li><li>Disable Time Sync</li><li>Disable Offline Files</li><li>Disable Program Compatibility</li><li>Disable ALG</li><li>Disable RPC Locator</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>How it <span>works</span></h2>
+    <p class="sub">Get set up in under a minute.</p>
+    <div class="how">
+      <div class="step"><div class="n">1</div><h3>Purchase</h3><p>Grab 0ms through Discord to get your lifetime key.</p></div>
+      <div class="step"><div class="n">2</div><h3>Activate</h3><p>Paste your key — it locks to your hardware automatically.</p></div>
+      <div class="step"><div class="n">3</div><h3>Optimize</h3><p>Toggle features, tune sliders, remap keys, make restore points.</p></div>
+      <div class="step"><div class="n">4</div><h3>Play</h3><p>Minimize to tray and let it work silently while you game.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>Get <span>0ms</span></h2>
+    <p class="sub">One-time purchase. Lifetime key, hardware-locked to your PC.</p>
+    <div class="buy">
+      <div class="name">0ms Optimizer</div>
+      <div class="tagline">Windows game optimizer · Premium lifetime license</div>
+      <div class="price">$6.99<small> / lifetime</small></div>
+      <ul class="perks">
+        <li>All 79 optimizations unlocked</li>
+        <li>Precision tuning &amp; sliders</li>
+        <li>Full key remapping with macros</li>
+        <li>Backup &amp; restore points</li>
+        <li>Lifetime updates</li>
+      </ul>
+      <a class="btn purchase" href="https://discord.gg/EeD4Z2xgpp">Purchase through Discord ↗</a>
+      <div class="muted" style="margin-top:14px;font-size:12px;">Purchases are handled securely in our Discord server.</div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>FAQ</h2>
+    <p class="sub">Questions? Join our <a href="https://discord.gg/EeD4Z2xgpp">Discord</a> and ask.</p>
+    <div class="faq">
+      <details open><summary>How do I buy 0ms?</summary><p>Click "Purchase through Discord" above and follow the instructions in our server. After payment you'll receive a lifetime key.</p></details>
+      <details><summary>What is a lifetime key?</summary><p>One payment gets you a key that never expires and is bound to your specific hardware (HWID), so it can't be shared.</p></details>
+      <details><summary>Does 0ms reduce my real ping?</summary><p>It applies real local TCP/DNS and system tuning to reduce packet-processing delay and input latency. It cannot change your physical distance to a game server.</p></details>
+      <details><summary>Is it safe / reversible?</summary><p>Yes. Every change is a standard Windows setting that can be toggled off or rolled back with a restore point.</p></details>
+      <details><summary>Can I run it in the background?</summary><p>Absolutely — it minimizes to your system tray and keeps working silently while you play.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 0ms Optimizer · <a href="https://discord.gg/EeD4Z2xgpp">Join the Discord</a> · Built for cleaner gameplay.</p>
+  </div>
+</footer>
+
+</body>
+</html>
