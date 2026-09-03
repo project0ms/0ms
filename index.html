@@ -34,7 +34,7 @@ a{color:inherit;text-decoration:none;}
   background:radial-gradient(900px 480px at 50% -5%,rgba(230,52,74,.16),transparent 60%);}
 .scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:2000;background:linear-gradient(90deg,var(--red),var(--red-bright));}
 
-/* NAV */
+
 .site-nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:1000;
   width:max-content;max-width:min(1220px,calc(100vw - 32px));height:64px;
   background:rgba(12,12,12,.8);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;
@@ -69,7 +69,7 @@ a{color:inherit;text-decoration:none;}
 @media(max-width:1040px){.nav-links,.btn-nav{display:none;}.nav-toggle{display:flex;}
   .site-nav,.site-nav.scrolled{top:0;left:0;transform:none;width:100%;max-width:100%;height:60px;border-radius:0;border-top:none;border-left:none;border-right:none;}}
 
-/* HERO */
+
 .container{position:relative;z-index:2;padding-top:150px;}
 .hero{text-align:center;padding:70px 0 40px;}
 .hero-pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;
@@ -91,7 +91,7 @@ a{color:inherit;text-decoration:none;}
 .spec b.hot{color:var(--red-bright);}
 .spec span{font-size:12px;color:var(--dim);}
 
-/* sections */
+
 section{padding:84px 0;}
 .sec-head{text-align:center;max-width:680px;margin:0 auto 56px;}
 .sec-tag{display:inline-block;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red-bright);
@@ -99,7 +99,7 @@ section{padding:84px 0;}
 .sec-title{font-family:var(--font-head);font-weight:800;font-size:clamp(30px,4.5vw,46px);letter-spacing:-.02em;}
 .sec-desc{color:var(--muted);font-size:17px;margin-top:12px;}
 
-/* full features */
+
 .feat-groups{display:flex;flex-direction:column;gap:28px;}
 .feat-group{padding:28px;border:1px solid var(--border);border-radius:16px;background:var(--panel);}
 .feat-group h3{font-family:var(--font-head);font-size:22px;margin-bottom:4px;display:flex;align-items:center;gap:10px;}
@@ -125,7 +125,7 @@ section{padding:84px 0;}
 .download{display:none;margin-top:16px;animation:pop .3s ease;}
 @keyframes pop{from{transform:scale(.95);opacity:0;}to{transform:scale(1);opacity:1;}}
 
-/* reviews */
+
 .review-summary{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap;margin-bottom:48px;}
 .review-summary .big{font-family:var(--font-head);font-size:56px;font-weight:800;line-height:1;}
 .review-summary .stars{color:var(--red-bright);font-size:22px;letter-spacing:2px;}
@@ -153,7 +153,7 @@ section{padding:84px 0;}
 .review-form .rstatus.ok{color:#4cc38a;}
 .review-form .rstatus.err{color:#ff8a92;}
 
-/* faq */
+
 .faq{max-width:720px;margin:0 auto;}
 details{border:1px solid var(--border);border-radius:14px;background:var(--panel);padding:18px 22px;margin-bottom:12px;transition:.2s;}
 details:hover{border-color:var(--border-strong);}
@@ -166,7 +166,7 @@ footer{border-top:1px solid var(--border);padding:40px 0;text-align:center;color
 footer a{color:var(--muted);}
 footer a:hover{color:var(--text);}
 
-/* chat */
+
 #chatBtn{position:fixed;right:24px;bottom:24px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:100;
   background:var(--red);color:#fff;font-size:24px;box-shadow:0 12px 30px rgba(230,52,74,.4);transition:.2s;}
 #chatBtn:hover{transform:scale(1.06);background:var(--red-bright);}
@@ -187,7 +187,7 @@ footer a:hover{color:var(--text);}
 .chat-input button{background:var(--red);color:#fff;border:none;border-radius:10px;padding:0 18px;font-weight:700;cursor:pointer;}
 .chat-input button:hover{background:var(--red-bright);}
 
-/* reveal */
+
 .rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1);}
 .rv.on{opacity:1;transform:none;}
 </style>
@@ -224,7 +224,7 @@ footer a:hover{color:var(--text);}
 
 <div class="container" id="top">
 
-  <!-- HERO -->
+
   <div class="hero">
     <div class="hero-pill"><span class="dot"></span><span>Windows game optimizer</span></div>
     <h1>Zero latency.<br><span>Zero limits.</span></h1>
@@ -241,7 +241,7 @@ footer a:hover{color:var(--text);}
     </div>
   </div>
 
-  <!-- ALL FEATURES -->
+ 
   <section id="features">
     <div class="wrap">
       <div class="sec-head rv">
@@ -253,7 +253,7 @@ footer a:hover{color:var(--text);}
     </div>
   </section>
 
-  <!-- DOWNLOAD -->
+  
   <section id="download">
     <div class="wrap">
       <div class="sec-head rv">
@@ -277,7 +277,7 @@ footer a:hover{color:var(--text);}
     </div>
   </section>
 
-  <!-- REVIEWS -->
+  
   <section id="reviews">
     <div class="wrap">
       <div class="sec-head rv">
@@ -310,7 +310,7 @@ footer a:hover{color:var(--text);}
     </div>
   </section>
 
-  <!-- FAQ -->
+ 
   <section id="faq">
     <div class="wrap">
       <div class="sec-head rv">
@@ -348,7 +348,7 @@ footer a:hover{color:var(--text);}
 </div>
 
 <script>
-// ---- key validation ----
+
 const ALPHABET="0123456789ABCDEFGHJKMNPQRSTVWXYZ";
 function isValidKey(k){k=(k||"").toUpperCase().replace(/[^A-Z0-9]/g,"");if(!k.startsWith("NP"))return false;
   const c=k.slice(2);if(c.length!==18)return false;const p=c.slice(0,16),ch=c.slice(16,18);let s=0;
@@ -377,7 +377,7 @@ const FEATURES=[
       <div class="gsub">${grp.sub}</div><div class="feat-list">${grp.items.map(x=>`<div class="feat-item">${x}</div>`).join('')}</div>`;
     g.appendChild(d);});})();
 
-// ---- reviews ----
+
 const SEED=[["Mason K.",5,"Honestly this fixed my stutter in valorant. nothing else worked.","3d ago"],
 ["Jayden R.",4,"solid tool, input feels way cleaner now","1w ago"],
 ["Theresa M.",5,"My pc is 6 years old and games run better than before. crazy","2w ago"],
@@ -402,7 +402,7 @@ function addReview(n,stars,txt,date){const g=document.getElementById('reviewGrid
   g.prepend(d);}
 SEED.forEach(r=>addReview(r[0],r[1],r[2],r[3]));
 
-// star picker
+
 const starPick=document.getElementById('starPick');let picked=0;
 starPick.querySelectorAll('span').forEach(s=>s.addEventListener('click',()=>{picked=+s.dataset.v;
   starPick.querySelectorAll('span').forEach(x=>x.classList.toggle('on',+x.dataset.v<=picked));}));
@@ -419,20 +419,20 @@ document.getElementById('revSubmit').addEventListener('click',()=>{
   document.getElementById('revKey').value='';document.getElementById('revText').value='';starPick.querySelectorAll('span').forEach(x=>x.classList.remove('on'));picked=0;
 });
 
-// ---- nav ----
+
 (function(){const nav=document.getElementById('siteNav'),tg=document.getElementById('navToggle'),mm=document.getElementById('mobileMenu');
   if(tg&&mm)tg.addEventListener('click',()=>{tg.classList.toggle('active');mm.classList.toggle('active');});
   window.addEventListener('scroll',()=>{if((window.scrollY||0)>12)nav.classList.add('scrolled');else nav.classList.remove('scrolled');},{passive:true});
 })();
 
-// ---- scroll progress + reveal ----
+
 (function(){const sp=document.getElementById('scrollProgress');
   const sync=()=>{const el=document.documentElement,m=el.scrollHeight-el.clientHeight;sp.style.width=m>0?Math.min(100,(el.scrollTop/m)*100)+'%':'0%';};
   sync();window.addEventListener('scroll',sync,{passive:true});window.addEventListener('resize',sync,{passive:true});
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');}),{rootMargin:'0px 0px -6% 0px'});
   document.querySelectorAll('.rv').forEach(el=>io.observe(el));})();
 
-// ---- chat (ai-style support agent) ----
+
 const chatBtn=document.getElementById('chatBtn'),chat=document.getElementById('chat'),chatClose=document.getElementById('chatClose'),
       chatMsgs=document.getElementById('chatMsgs'),chatInput=document.getElementById('chatInput'),chatSend=document.getElementById('chatSend');
 function addMsg(t,w){const d=document.createElement('div');d.className='msg '+w;d.textContent=t;chatMsgs.appendChild(d);chatMsgs.scrollTop=chatMsgs.scrollHeight;}
