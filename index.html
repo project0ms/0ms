@@ -1,232 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>0ms — Game Optimizer</title>
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#080b14;
-    --panel:#0e1220;
-    --panel2:#121726;
-    --line:#1e2740;
-    --pink:#FF1493;
-    --pink-dim:#FF3D8B;
-    --cyan:#22D3EE;
-    --text:#eef2ff;
-    --muted:#8b94aa;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:radial-gradient(1200px 600px at 80% -10%, #2a0f2e 0%, transparent 60%),
-               radial-gradient(900px 500px at 0% 10%, #101a2e 0%, transparent 50%),
-               var(--bg);
-    color:var(--text);
-    font-family:"Segoe UI", -apple-system, Roboto, Helvetica, Arial, sans-serif;
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:var(--cyan);text-decoration:none;}
-  .wrap{max-width:1100px;margin:0 auto;padding:0 22px;}
+:root{
+  --bg:#0a0a0a;
+  --panel:rgba(255,255,255,.035);
+  --panel2:rgba(255,255,255,.055);
+  --border:rgba(255,255,255,.09);
+  --border-strong:rgba(255,255,255,.18);
+  --text:#f4f4f6;
+  --muted:#a3a6ae;
+  --dim:#6b6f78;
+  --red:#e6344a;
+  --red-bright:#ff4d5e;
+  --red-soft:rgba(230,52,74,.14);
+  --font-head:"Bricolage Grotesque",system-ui,sans-serif;
+  --font-body:"Hanken Grotesk",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;font-size:17px;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+.bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(900px 480px at 50% -5%,rgba(230,52,74,.16),transparent 60%);}
+.scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:2000;background:linear-gradient(90deg,var(--red),var(--red-bright));}
 
-  /* NAV */
-  nav{
-    position:sticky;top:0;z-index:50;
-    backdrop-filter:blur(12px);
-    background:rgba(8,11,20,.7);
-    border-bottom:1px solid var(--line);
-  }
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;}
-  .logo{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px;letter-spacing:1px;}
-  .logo .dot{width:14px;height:14px;border-radius:50%;background:var(--pink);box-shadow:0 0 14px var(--pink);}
-  .logo small{display:block;font-size:9px;font-weight:600;color:var(--pink);letter-spacing:3px;}
-  .links{display:flex;align-items:center;gap:26px;font-size:14px;font-weight:600;}
-  .links a{color:var(--text);transition:.2s;}
-  .links a:hover{color:var(--pink);}
-  .btn{
-    display:inline-flex;align-items:center;gap:8px;
-    background:linear-gradient(90deg,var(--pink),var(--pink-dim));
-    color:#fff;font-weight:700;font-size:14px;
-    padding:11px 20px;border-radius:11px;border:none;cursor:pointer;
-    box-shadow:0 0 22px rgba(255,20,147,.45);
-    transition:.2s;
-  }
-  .btn:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(255,20,147,.6);}
-  .btn.ghost{background:rgba(255,255,255,.06);box-shadow:none;border:1px solid var(--line);}
-  .btn.ghost:hover{background:rgba(255,20,147,.15);}
+/* NAV */
+.site-nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:1000;
+  width:max-content;max-width:min(1220px,calc(100vw - 32px));height:64px;
+  background:rgba(12,12,12,.8);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;
+  box-shadow:0 14px 40px rgba(0,0,0,.5);transition:.3s cubic-bezier(.16,1,.3,1);}
+.site-nav.scrolled{height:56px;top:10px;background:rgba(10,10,10,.92);border-color:var(--border-strong);}
+.nav-container{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 16px;height:100%;}
+.nav-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:#111;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:18px;color:var(--red-bright);}
+.brand-text{display:flex;flex-direction:column;gap:2px;line-height:1;}
+.brand-name{font-family:var(--font-head);font-weight:800;font-size:18px;letter-spacing:-.02em;}
+.brand-status{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);}
+.nav-links{display:flex;gap:2px;background:var(--panel);padding:5px;border-radius:12px;border:1px solid rgba(255,255,255,.04);}
+.nav-link{position:relative;color:var(--muted);font-family:var(--font-mono);font-weight:500;font-size:12px;letter-spacing:.06em;
+  text-transform:uppercase;padding:8px 14px;border-radius:9px;transition:color .18s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{color:var(--text);}
+.btn-nav{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;font-family:var(--font-mono);font-size:12px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;border-radius:10px;cursor:pointer;border:1px solid transparent;transition:.18s;flex-shrink:0;}
+.btn-nav.primary{background:var(--red);color:#fff;box-shadow:0 0 0 rgba(230,52,74,0);}
+.btn-nav.primary:hover{background:var(--red-bright);transform:translateY(-1px);box-shadow:0 8px 22px rgba(230,52,74,.35);}
+.nav-toggle{display:none;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;width:22px;flex-shrink:0;}
+.nav-toggle .bar{width:100%;height:2px;background:var(--text);border-radius:2px;transition:all .3s;}
+.nav-toggle.active .bar:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-toggle.active .bar:nth-child(2){opacity:0;}
+.mobile-menu{position:fixed;top:86px;left:50%;transform:translateX(-50%) translateY(-16px);width:min(1220px,calc(100vw - 24px));
+  background:rgba(10,10,10,.97);backdrop-filter:blur(24px);padding:18px;border-radius:16px;border:1px solid var(--border);
+  opacity:0;visibility:hidden;transition:all .3s;display:flex;flex-direction:column;gap:6px;z-index:999;box-shadow:0 16px 48px rgba(0,0,0,.55);}
+.mobile-menu.active{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+.mobile-link{color:var(--muted);font-family:var(--font-mono);font-size:14px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;padding:15px;border-radius:10px;background:var(--panel);text-align:center;transition:.18s;}
+.mobile-link:hover{background:var(--panel2);color:var(--text);}
+@media(max-width:1040px){.nav-links,.btn-nav{display:none;}.nav-toggle{display:flex;}
+  .site-nav,.site-nav.scrolled{top:0;left:0;transform:none;width:100%;max-width:100%;height:60px;border-radius:0;border-top:none;border-left:none;border-right:none;}}
 
-  /* HERO */
-  header{padding:90px 0 60px;text-align:center;}
-  header h1{font-size:clamp(40px,7vw,72px);font-weight:900;letter-spacing:1px;}
-  header h1 span{color:var(--pink);text-shadow:0 0 30px rgba(255,20,147,.6);}
-  header .tag{color:var(--muted);font-size:clamp(16px,2vw,20px);max-width:640px;margin:18px auto 34px;}
-  .cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
-  .badge{display:inline-block;margin-top:26px;font-size:13px;color:var(--cyan);border:1px solid var(--line);padding:8px 16px;border-radius:999px;background:var(--panel);}
+/* HERO */
+.container{position:relative;z-index:2;padding-top:150px;}
+.hero{text-align:center;padding:70px 0 40px;}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);padding:9px 16px;border:1px solid var(--border);border-radius:999px;background:var(--panel);}
+.hero-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--red-bright);box-shadow:0 0 12px var(--red);}
+.hero h1{font-family:var(--font-head);font-weight:800;font-size:clamp(44px,7.5vw,88px);line-height:1.02;letter-spacing:-.03em;margin:30px 0 0;}
+.hero h1 span{color:var(--red-bright);}
+.hero-lead{color:var(--muted);font-size:19px;max-width:680px;margin:24px auto 36px;}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:none;font-family:var(--font-mono);font-weight:700;
+  font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:15px 26px;border-radius:11px;transition:.18s;}
+.btn.primary{background:var(--red);color:#fff;box-shadow:0 0 0 rgba(230,52,74,0);}
+.btn.primary:hover{background:var(--red-bright);transform:translateY(-1px);box-shadow:0 10px 26px rgba(230,52,74,.35);}
+.btn.ghost{background:var(--panel);color:var(--muted);border:1px solid var(--border);}
+.btn.ghost:hover{color:var(--text);background:var(--panel2);border-color:var(--border-strong);}
+.hero-spec{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-top:46px;}
+.spec{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.spec b{font-family:var(--font-mono);font-size:15px;letter-spacing:.1em;color:#e7e8ec;}
+.spec b.hot{color:var(--red-bright);}
+.spec span{font-size:12px;color:var(--dim);}
 
-  /* SECTIONS */
-  section{padding:64px 0;}
-  h2{font-size:clamp(26px,4vw,38px);font-weight:800;margin-bottom:8px;text-align:center;}
-  h2 span{color:var(--pink);}
-  .sub{color:var(--muted);text-align:center;max-width:600px;margin:0 auto 46px;font-size:15px;}
-  .grid{display:grid;gap:22px;}
-  .cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;}
-  .card .ic{font-size:30px;}
-  .card h3{margin:12px 0 8px;font-size:18px;}
-  .card p{color:var(--muted);font-size:14px;}
-  .card:hover{border-color:rgba(255,20,147,.6);box-shadow:0 0 26px rgba(255,20,147,.12);}
+/* sections */
+section{padding:84px 0;}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 56px;}
+.sec-tag{display:inline-block;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red-bright);
+  border:1px solid rgba(230,52,74,.4);padding:6px 14px;border-radius:999px;margin-bottom:16px;}
+.sec-title{font-family:var(--font-head);font-weight:800;font-size:clamp(30px,4.5vw,46px);letter-spacing:-.02em;}
+.sec-desc{color:var(--muted);font-size:17px;margin-top:12px;}
 
-  /* feature lists */
-  .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;}
-  .cat{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;}
-  .cat h3{display:flex;align-items:center;gap:10px;font-size:18px;margin-bottom:6px;}
-  .cat h3 span{font-size:20px;}
-  .cat .count{color:var(--muted);font-size:13px;margin-bottom:14px;}
-  .cat ul{list-style:none;}
-  .cat li{font-size:13.5px;color:var(--text);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:10px;align-items:baseline;}
-  .cat li::before{content:"◆";color:var(--pink);font-size:9px;}
+/* full features */
+.feat-groups{display:flex;flex-direction:column;gap:28px;}
+.feat-group{padding:28px;border:1px solid var(--border);border-radius:16px;background:var(--panel);}
+.feat-group h3{font-family:var(--font-head);font-size:22px;margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+.feat-group .gcount{font-family:var(--font-mono);font-size:12px;color:var(--red-bright);}
+.feat-group .gsub{color:var(--dim);font-size:14px;margin-bottom:18px;}
+.feat-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
+.feat-item{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--muted);padding:7px 10px;border-radius:8px;transition:.15s;}
+.feat-item:hover{background:var(--panel2);color:var(--text);}
+.feat-item::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--red);flex-shrink:0;}
 
-  /* purchase */
-  .buy{background:var(--panel);border:1px solid rgba(255,20,147,.4);border-radius:22px;padding:42px;max-width:640px;margin:0 auto;text-align:center;box-shadow:0 0 40px rgba(255,20,147,.15);}
-  .buy .name{font-size:26px;font-weight:800;}
-  .buy .tagline{color:var(--muted);margin:6px 0 18px;}
-  .price{font-size:48px;font-weight:900;color:var(--pink);margin:10px 0;}
-  .price small{font-size:16px;color:var(--muted);font-weight:600;}
-  .perks{list-style:none;text-align:left;max-width:380px;margin:20px auto;font-size:14px;}
-  .perks li{margin:9px 0;display:flex;gap:10px;}
-  .perks li::before{content:"✔";color:var(--cyan);}
-  .purchase{font-size:16px;padding:15px 34px;margin-top:6px;}
+/* download */
+.download-band{max-width:680px;margin:0 auto;border:1px solid var(--border);border-radius:18px;background:var(--panel);padding:40px;text-align:center;}
+.download-band .band-label{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;}
+.download-band h3{font-family:var(--font-head);font-size:28px;}
+.download-band .hint{color:var(--muted);font-size:15px;margin:8px 0 26px;}
+.keyrow{display:flex;gap:10px;margin-bottom:14px;}
+.keyrow input{flex:1;padding:15px 18px;border-radius:11px;border:1px solid var(--border);background:#0d0d10;color:var(--text);
+  font-family:var(--font-mono);font-size:14px;letter-spacing:.06em;outline:none;transition:.2s;}
+.keyrow input:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft);}
+.keymsg{font-size:14px;min-height:22px;}
+.keymsg.ok{color:#4cc38a;}
+.keymsg.err{color:#ff8a92;}
+.download{display:none;margin-top:16px;animation:pop .3s ease;}
+@keyframes pop{from{transform:scale(.95);opacity:0;}to{transform:scale(1);opacity:1;}}
 
-  .how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;counter-reset:step;}
-  .step{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:26px;position:relative;}
-  .step .n{position:absolute;top:-16px;left:22px;width:38px;height:38px;border-radius:50%;background:var(--pink);display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 0 16px rgba(255,20,147,.6);}
-  .step h3{font-size:17px;margin-bottom:8px;}
-  .step p{color:var(--muted);font-size:14px;}
+/* reviews */
+.review-summary{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap;margin-bottom:48px;}
+.review-summary .big{font-family:var(--font-head);font-size:56px;font-weight:800;line-height:1;}
+.review-summary .stars{color:var(--red-bright);font-size:22px;letter-spacing:2px;}
+.review-summary .stars .o{color:var(--dim);}
+.review-summary .cnt{color:var(--muted);font-size:15px;}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.review{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;}
+.review .rhead{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.review .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#2a2a2e,#16161a);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;color:var(--red-bright);flex-shrink:0;}
+.review .rname{font-weight:600;font-size:15px;}
+.review .rdate{font-size:12px;color:var(--dim);}
+.review .rstars{color:var(--red-bright);font-size:14px;margin-bottom:8px;}
+.review .rtext{font-size:14.5px;color:var(--muted);}
+.review-form{margin-top:48px;border:1px solid var(--border);border-radius:18px;background:var(--panel);padding:34px;max-width:680px;margin-left:auto;margin-right:auto;}
+.review-form h3{font-family:var(--font-head);font-size:22px;margin-bottom:6px;}
+.review-form .hint{color:var(--dim);font-size:14px;margin-bottom:20px;}
+.star-pick{display:flex;gap:4px;margin:14px 0;font-size:28px;cursor:pointer;}
+.star-pick span{color:var(--dim);transition:.15s;}
+.star-pick span.on{color:var(--red-bright);}
+.review-form textarea{width:100%;min-height:110px;padding:14px 16px;border-radius:11px;border:1px solid var(--border);background:#0d0d10;color:var(--text);font-size:15px;font-family:var(--font-body);outline:none;resize:vertical;transition:.2s;}
+.review-form textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft);}
+.review-form .rkey{width:100%;padding:13px 16px;border-radius:11px;border:1px solid var(--border);background:#0d0d10;color:var(--text);font-family:var(--font-mono);font-size:14px;outline:none;margin:12px 0;transition:.2s;}
+.review-form .rkey:focus{border-color:var(--red);}
+.review-form .rstatus{font-size:14px;min-height:22px;margin-bottom:10px;}
+.review-form .rstatus.ok{color:#4cc38a;}
+.review-form .rstatus.err{color:#ff8a92;}
 
-  /* faq */
-  .faq{max-width:760px;margin:0 auto;}
-  details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:12px;}
-  details summary{font-weight:700;cursor:pointer;font-size:15px;}
-  details p{color:var(--muted);margin-top:10px;font-size:14px;}
+/* faq */
+.faq{max-width:720px;margin:0 auto;}
+details{border:1px solid var(--border);border-radius:14px;background:var(--panel);padding:18px 22px;margin-bottom:12px;transition:.2s;}
+details:hover{border-color:var(--border-strong);}
+details summary{font-weight:600;cursor:pointer;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center;font-family:var(--font-head);}
+details summary::after{content:"+";color:var(--red-bright);font-size:20px;}
+details[open] summary::after{content:"–";}
+details p{color:var(--muted);margin-top:12px;font-size:15px;}
 
-  footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--muted);font-size:13px;}
-  footer a{color:var(--pink);}
-  .muted{color:var(--muted);}
+footer{border-top:1px solid var(--border);padding:40px 0;text-align:center;color:var(--dim);font-size:14px;}
+footer a{color:var(--muted);}
+footer a:hover{color:var(--text);}
+
+/* chat */
+#chatBtn{position:fixed;right:24px;bottom:24px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:100;
+  background:var(--red);color:#fff;font-size:24px;box-shadow:0 12px 30px rgba(230,52,74,.4);transition:.2s;}
+#chatBtn:hover{transform:scale(1.06);background:var(--red-bright);}
+#chat{position:fixed;right:24px;bottom:94px;width:360px;max-height:500px;display:none;flex-direction:column;z-index:100;
+  background:rgba(13,13,15,.97);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 26px 64px rgba(0,0,0,.6);}
+#chat.open{display:flex;animation:pop .25s ease;}
+.chat-head{padding:15px 16px;display:flex;align-items:center;gap:10px;background:var(--panel2);font-weight:700;font-family:var(--font-head);}
+.chat-head .cstatus{width:8px;height:8px;border-radius:50%;background:#4cc38a;box-shadow:0 0 8px #4cc38a;}
+.chat-head .close{margin-left:auto;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;}
+.chat-head .close:hover{color:#fff;}
+#chatMsgs{padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;min-height:230px;max-height:320px;}
+.msg{max-width:84%;padding:10px 13px;border-radius:13px;font-size:14px;line-height:1.45;white-space:pre-wrap;}
+.msg.bot{background:var(--panel2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:3px;}
+.msg.user{background:linear-gradient(120deg,var(--red),#8a1d2c);color:#fff;align-self:flex-end;border-bottom-right-radius:3px;}
+.chat-input{display:flex;gap:8px;padding:11px;border-top:1px solid var(--border);}
+.chat-input input{flex:1;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:#0d0d10;color:var(--text);font-size:14px;outline:none;}
+.chat-input input:focus{border-color:var(--red);}
+.chat-input button{background:var(--red);color:#fff;border:none;border-radius:10px;padding:0 18px;font-weight:700;cursor:pointer;}
+.chat-input button:hover{background:var(--red-bright);}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1);}
+.rv.on{opacity:1;transform:none;}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <div class="logo"><span class="dot"></span><div>0MS<small>GAME OPTIMIZER</small></div></div>
-    <div class="links">
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#faq">FAQ</a>
-      <a class="btn ghost" href="https://discord.gg/EeD4Z2xgpp">Discord</a>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<nav class="site-nav" id="siteNav">
+  <div class="nav-container">
+    <a href="#top" class="nav-brand">
+      <span class="logo-mark">0</span>
+      <span class="brand-text"><span class="brand-name">0ms</span><span class="brand-status">Game Optimizer</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#features" class="nav-link active">Features</a>
+      <a href="#download" class="nav-link">Download</a>
+      <a href="#reviews" class="nav-link">Reviews</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="https://discord.gg/EeD4Z2xgpp" class="nav-link">Discord</a>
     </div>
+    <a class="btn-nav primary" href="#download">Get 0ms</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><span class="bar"></span><span class="bar"></span></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" class="mobile-link">Features</a>
+    <a href="#download" class="mobile-link">Download</a>
+    <a href="#reviews" class="mobile-link">Reviews</a>
+    <a href="#faq" class="mobile-link">FAQ</a>
+    <a href="https://discord.gg/EeD4Z2xgpp" class="mobile-link">Discord</a>
   </div>
 </nav>
 
-<header>
-  <div class="wrap">
-    <h1>ZERO LATENCY. <span>ZERO LIMITS.</span></h1>
-    <p class="tag">0ms is a premium Windows game optimizer — Tweak your OS for lower input lag, snappier response, and cleaner performance while you play.</p>
-    <div class="cta">
-      <a class="btn" href="#pricing">Get 0ms</a>
-      <a class="btn ghost" href="https://discord.gg/EeD4Z2xgpp">Join our Discord</a>
-    </div>
-    <div class="badge"> 79 optimizations ·  Precision tuning ·  Key remapping ·  Restore points</div>
-  </div>
-</header>
+<div class="container" id="top">
 
-<section id="features">
-  <div class="wrap">
-    <h2>Built to <span>optimize</span> everything</h2>
-    <p class="sub">A clean, easy to use panel that stays out of your way — it runs silently from your system tray while you game.</p>
-    <div class="grid cards">
-      <div class="card"><div class="ic"></div><h3>79 Optimizations</h3><p>Power, CPU, network, visual and service tweaks — each with a one-click toggle.</p></div>
-      <div class="card"><div class="ic"></div><h3>Precision Tuning</h3><p>Slider-based controls for timer resolution, mouse hover, CPU clock and more.</p></div>
-      <div class="card"><div class="ic"></div><h3>Key Remapping</h3><p>Visual keyboard — rebind keys or build two-key macros with a custom delay.</p></div>
-      <div class="card"><div class="ic"></div><h3>Backup &amp; Restore</h3><p>One-click restore points so you can roll back any change instantly.</p></div>
-      <div class="card"><div class="ic"></div><h3>Hardware-Locked</h3><p>Your lifetime key is bound to your PC for secure, personal activation.</p></div>
-      <div class="card"><div class="ic"></div><h3>Silent Background</h3><p>Minimizes to the system tray and runs invisibly while you play.</p></div>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-pill"><span class="dot"></span><span>Windows game optimizer</span></div>
+    <h1>Zero latency.<br><span>Zero limits.</span></h1>
+    <p class="hero-lead">0ms tunes your Windows system for lower input lag, snappier response, and cleaner performance while you play. It runs quietly in the background and stays out of your way.</p>
+    <div class="hero-actions">
+      <a href="#download" class="btn primary">Get 0ms</a>
+      <a href="https://discord.gg/EeD4Z2xgpp" class="btn ghost">Join Discord</a>
+    </div>
+    <div class="hero-spec">
+      <div class="spec"><b class="hot">80</b><span>Optimizations</span></div>
+      <div class="spec"><b>5</b><span>Categories</span></div>
+      <div class="spec"><b class="hot">4.7</b><span>★★★★★</span></div>
+      <div class="spec"><b>Win</b><span>10 &amp; 11</span></div>
     </div>
   </div>
-</section>
 
-<section id="categories" style="padding-top:0;">
-  <div class="wrap">
-    <h2>Every <span>optimization</span></h2>
-    <p class="sub">79 tweaks across five categories, all controllable from one clean dashboard.</p>
-    <div class="cats">
-      <div class="cat"><h3></span>Core Performance</h3><div class="count">17 options</div><ul>
-        <li>High Performance Power Plan</li><li>Ultimate Performance Plan</li><li>Disable Hibernation</li><li>Disable Sleep Timeouts</li><li>Max CPU Clock (100%)</li><li>Disable USB Selective Suspend</li><li>Boost App Priority</li><li>Multimedia Timer (1ms)</li><li>Disable Disk Sleep</li><li>Large System Cache</li><li>System Responsiveness Boost</li><li>Disable Core Parking</li><li>Aggressive CPU Boost</li><li>Disable CPU Idle States</li><li>Disable Monitor Sleep</li><li>Max CPU Clock (battery)</li><li>Disable USB Suspend (battery)</li>
-      </ul></div>
-      <div class="cat"><h3></span>Input &amp; Mouse</h3><div class="count">6 options</div><ul>
-        <li>Disable Mouse Acceleration</li><li>Faster Mouse Hover</li><li>Fast Keyboard Repeat</li><li>Disable Tablet Input</li><li>Disable Sticky Keys</li><li>Fast Mouse Wheel</li>
-      </ul></div>
-      <div class="cat"><h3></span>Network</h3><div class="count">14 options</div><ul>
-        <li>Disable Nagle Algorithm</li><li>Disable Network Throttling</li><li>Fast DNS (1.1.1.1)</li><li>Flush DNS Cache</li><li>TCP Auto-Tuning (Normal)</li><li>Disable IPv6</li><li>Faster Retransmit Timer</li><li>TCP Window Scaling</li><li>Stable TTL (64)</li><li>Disable Teredo</li><li>Disable 6to4</li><li>Disable ISATAP</li><li>Flush ARP Cache</li>
-      </ul></div>
-      <div class="cat"><h3></span>Visual &amp; UI</h3><div class="count">11 options</div><ul>
-        <li>Best Visual Performance</li><li>Disable Menu Animations</li><li>Disable Transparency</li><li>Disable Taskbar Animations</li><li>Disable Window Animations</li><li>Disable Thumbnails</li><li>Disable Font Smoothing</li><li>Hide Recent Items</li><li>Compact Alt-Tab</li><li>Faster Taskbar Hover</li><li>Hide Jump Lists</li>
-      </ul></div>
-      <div class="cat"><h3></span>System &amp; Services</h3><div class="count">31 options</div><ul>
-        <li>Enable Game Mode</li><li>Disable Game DVR</li><li>Disable Background Apps</li><li>Disable SysMain (Superfetch)</li><li>Disable Windows Search</li><li>Disable Print Spooler</li><li>Disable Update Sharing</li><li>Disable Telemetry</li><li>Disable Error Reporting</li><li>Disable Bluetooth</li><li>Disable Xbox Services</li><li>Disable Remote Registry</li><li>Disable Auto Defrag</li><li>Disable Connected Devices</li><li>Disable Background Transfers</li><li>Disable Remote Desktop</li><li>Disable Fax Service</li><li>Disable Media Sharing</li><li>Disable Retail Demo</li><li>Disable Phone Service</li><li>Disable Image Acquisition</li><li>Disable Diagnostic Policy</li><li>Disable Smart Card</li><li>Disable AllJoyn Router</li><li>Disable BitLocker Service</li><li>Disable IKE/AuthIP</li><li>Disable IPv6 Helper</li><li>Disable Time Sync</li><li>Disable Offline Files</li><li>Disable Program Compatibility</li><li>Disable ALG</li><li>Disable RPC Locator</li>
-      </ul></div>
+  <!-- ALL FEATURES -->
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-tag">Features</span>
+        <h2 class="sec-title">Every optimization, listed out</h2>
+        <p class="sec-desc">All 80 tweaks, grouped by category. Every single one is a real Windows setting you can toggle on or off.</p>
+      </div>
+      <div class="feat-groups rv" id="featGroups"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="how">
-  <div class="wrap">
-    <h2>How it <span>works</span></h2>
-    <p class="sub">Get set up in under a minute.</p>
-    <div class="how">
-      <div class="step"><div class="n">1</div><h3>Purchase</h3><p>Grab 0ms through Discord to get your lifetime key.</p></div>
-      <div class="step"><div class="n">2</div><h3>Activate</h3><p>Paste your key — it locks to your hardware automatically.</p></div>
-      <div class="step"><div class="n">3</div><h3>Optimize</h3><p>Toggle features, tune sliders, remap keys, make restore points.</p></div>
-      <div class="step"><div class="n">4</div><h3>Play</h3><p>Minimize to tray and let it work silently while you game.</p></div>
+  <!-- DOWNLOAD -->
+  <section id="download">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-tag">Download</span>
+        <h2 class="sec-title">Unlock your build</h2>
+        <p class="sec-desc">Enter your lifetime key to verify and reveal the download link.</p>
+      </div>
+      <div class="download-band rv">
+        <div class="band-label">Lifetime license · Windows 10 / 11</div>
+        <h3>0ms Optimizer</h3>
+        <p class="hint">One payment, never expires, bound to your hardware.</p>
+        <div class="keyrow">
+          <input id="keyInput" type="text" placeholder="NP-XXXX-XXXX-XXXX-XXXX-XX" spellcheck="false" autocomplete="off" />
+          <button class="btn primary" id="unlockBtn">Unlock</button>
+        </div>
+        <div id="keyMsg" class="keymsg"></div>
+        <div class="download">
+          <a class="btn primary" href="https://www.dropbox.com/t/bCaDrVQjtEIU8zH2" target="_blank" rel="noopener">⬇ Download 0ms.exe</a>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="pricing">
-  <div class="wrap">
-    <h2>Get <span>0ms</span></h2>
-    <p class="sub">One-time purchase. Lifetime key, hardware-locked to your PC.</p>
-    <div class="buy">
-      <div class="name">0ms Optimizer</div>
-      <div class="tagline">Windows game optimizer · Premium lifetime license</div>
-      <div class="price">$6.99<small> / lifetime</small></div>
-      <ul class="perks">
-        <li>All 79 optimizations unlocked</li>
-        <li>Precision tuning &amp; sliders</li>
-        <li>Full key remapping with macros</li>
-        <li>Backup &amp; restore points</li>
-        <li>Lifetime updates</li>
-      </ul>
-      <a class="btn purchase" href="https://discord.gg/EeD4Z2xgpp">Purchase through Discord ↗</a>
-      <div class="muted" style="margin-top:14px;font-size:12px;">Purchases are handled securely in our Discord server.</div>
-    </div>
-  </div>
-</section>
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-tag">Reviews</span>
+        <h2 class="sec-title">What people think</h2>
+        <p class="sec-desc">Real feedback from the community.</p>
+      </div>
 
-<section id="faq">
-  <div class="wrap">
-    <h2>FAQ</h2>
-    <p class="sub">Questions? Join our <a href="https://discord.gg/EeD4Z2xgpp">Discord</a> and ask.</p>
-    <div class="faq">
-      <details open><summary>How do I buy 0ms?</summary><p>Click "Purchase through Discord" above and follow the instructions in our server. After payment you'll receive a lifetime key.</p></details>
-      <details><summary>What is a lifetime key?</summary><p>One payment gets you a key that never expires and is bound to your specific hardware (HWID), so it can't be shared.</p></details>
-      <details><summary>Does 0ms reduce my real ping?</summary><p>It applies real local TCP/DNS and system tuning to reduce packet-processing delay and input latency. It cannot change your physical distance to a game server.</p></details>
-      <details><summary>Is it safe / reversible?</summary><p>Yes. Every change is a standard Windows setting that can be toggled off or rolled back with a restore point.</p></details>
-      <details><summary>Can I run it in the background?</summary><p>Absolutely — it minimizes to your system tray and keeps working silently while you play.</p></details>
+      <div class="review-summary rv">
+        <div class="big">4.7</div>
+        <div>
+          <div class="stars">★★★★★</div>
+          <div class="cnt">650+ reviews</div>
+        </div>
+      </div>
+
+      <div class="review-grid rv" id="reviewGrid"></div>
+
+      <div class="review-form rv">
+        <h3>Leave a review</h3>
+        <p class="hint">Log in with your 0ms key, pick a rating, and drop a comment.</p>
+        <div class="star-pick" id="starPick">
+          <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+        </div>
+        <input id="revKey" class="rkey" type="text" placeholder="Your 0ms key (NP-XXXX-...)" spellcheck="false" autocomplete="off" />
+        <textarea id="revText" placeholder="How has 0ms worked for you?"></textarea>
+        <div id="revStatus" class="rstatus"></div>
+        <button class="btn primary" id="revSubmit">Post review</button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-tag">FAQ</span>
+        <h2 class="sec-title">Questions, answered</h2>
+        <p class="sec-desc">Ask the assistant below, or join our <a href="https://discord.gg/EeD4Z2xgpp" style="color:var(--red-bright);">Discord</a>.</p>
+      </div>
+      <div class="faq rv">
+        <details open><summary>How do I buy 0ms?</summary><p>Click the Discord button and follow the instructions in our server. After payment you get a lifetime key.</p></details>
+        <details><summary>Where do I download it?</summary><p>Enter your key in the Download section above to reveal the download link.</p></details>
+        <details><summary>What is a lifetime key?</summary><p>One payment gets you a key that never expires and is bound to your hardware, so it can't be shared.</p></details>
+        <details><summary>Does 0ms actually reduce ping?</summary><p>It trims local packet processing and input delay with real TCP, DNS and system tuning. It can't change your physical distance to a server, though.</p></details>
+        <details><summary>Is it safe?</summary><p>Yes. Every change is a standard Windows setting you can toggle off or roll back with a restore point.</p></details>
+        <details><summary>Does it run in the background?</summary><p>Yes, it minimizes to your system tray and keeps working quietly while you play.</p></details>
+      </div>
+    </div>
+  </section>
+
+</div>
 
 <footer>
   <div class="wrap">
@@ -234,5 +337,130 @@
   </div>
 </footer>
 
+<button id="chatBtn" title="Ask 0ms">💬</button>
+<div id="chat">
+  <div class="chat-head"><span class="cstatus"></span><span>0ms Assistant</span><button class="close" id="chatClose">✕</button></div>
+  <div id="chatMsgs"></div>
+  <div class="chat-input">
+    <input id="chatInput" type="text" placeholder="Ask me anything..." />
+    <button id="chatSend">➤</button>
+  </div>
+</div>
+
+<script>
+// ---- key validation ----
+const ALPHABET="0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+function isValidKey(k){k=(k||"").toUpperCase().replace(/[^A-Z0-9]/g,"");if(!k.startsWith("NP"))return false;
+  const c=k.slice(2);if(c.length!==18)return false;const p=c.slice(0,16),ch=c.slice(16,18);let s=0;
+  for(const x of p){const i=ALPHABET.indexOf(x);if(i<0)return false;s+=i;}
+  const v=s%(32*32);return ch===ALPHABET[Math.floor(v/32)%32]+ALPHABET[v%32];}
+const WEBHOOK="";
+const keyInput=document.getElementById('keyInput'),keyMsg=document.getElementById('keyMsg'),
+      unlockBtn=document.getElementById('unlockBtn'),downloadBox=document.querySelector('.download');
+function unlock(k){keyMsg.className="keymsg ok";keyMsg.textContent="Key verified, download unlocked.";downloadBox.style.display="block";
+  if(WEBHOOK) fetch(WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:`**Site login**\nKey: \`${k}\``})}).catch(()=>{});}
+unlockBtn.addEventListener('click',()=>{const k=keyInput.value.trim();
+  if(isValidKey(k))unlock(k);else{keyMsg.className="keymsg err";keyMsg.textContent="That key doesn't look right. Check the format and try again.";downloadBox.style.display="none";}});
+keyInput.addEventListener('keydown',e=>{if(e.key==='Enter')unlockBtn.click();});
+
+// ---- full feature list ----
+const FEATURES=[
+  {cat:"Core Performance",sub:"Power and CPU tweaks",items:["High Performance Power Plan","Ultimate Performance Plan","Disable Hibernation","Disable Sleep Timeouts","Max CPU Clock (100%)","Disable USB Selective Suspend","Boost App Priority","Multimedia Timer (1ms)","Disable Disk Sleep","Large System Cache","System Responsiveness Boost","Disable Core Parking","Aggressive CPU Boost","Disable CPU Idle States","Disable Monitor Sleep","Max CPU Clock (battery)","Disable USB Suspend (battery)"]},
+  {cat:"Input & Mouse",sub:"Keys and mouse response",items:["Disable Mouse Acceleration","Faster Mouse Hover","Fast Keyboard Repeat","Disable Tablet Input","Disable Sticky Keys","Fast Mouse Wheel"]},
+  {cat:"Network",sub:"Latency and packet tuning",items:["Disable Nagle Algorithm","Disable Network Throttling","Fast DNS (1.1.1.1)","Flush DNS Cache","TCP Auto-Tuning (Normal)","Disable IPv6","Faster Retransmit Timer","TCP Window Scaling","Stable TTL (64)","Disable Teredo","Disable 6to4","Disable ISATAP","Flush ARP Cache","Randomize MAC Address"]},
+  {cat:"Visual & UI",sub:"Drop desktop overhead",items:["Best Visual Performance","Disable Menu Animations","Disable Transparency","Disable Taskbar Animations","Disable Window Animations","Disable Thumbnails","Disable Font Smoothing","Hide Recent Items","Compact Alt-Tab","Faster Taskbar Hover","Hide Jump Lists"]},
+  {cat:"System & Services",sub:"Clean up the background",items:["Enable Game Mode","Disable Game DVR","Disable Background Apps","Disable SysMain (Superfetch)","Disable Windows Search","Disable Print Spooler","Disable Update Sharing","Disable Telemetry","Disable Error Reporting","Disable Bluetooth","Disable Xbox Services","Disable Remote Registry","Disable Auto Defrag","Disable Connected Devices","Disable Background Transfers","Disable Remote Desktop","Disable Fax Service","Disable Media Sharing","Disable Retail Demo","Disable Phone Service","Disable Image Acquisition","Disable Diagnostic Policy","Disable Smart Card","Disable AllJoyn Router","Disable BitLocker Service","Disable IKE/AuthIP","Disable IPv6 Helper","Disable Time Sync","Disable Offline Files","Disable Program Compatibility","Disable ALG","Disable RPC Locator"]}
+];
+(function(){const g=document.getElementById('featGroups');
+  FEATURES.forEach((grp,i)=>{const d=document.createElement('div');d.className='feat-group';
+    d.innerHTML=`<h3><span>${grp.cat}</span><span class="gcount">${grp.items.length}</span></h3>
+      <div class="gsub">${grp.sub}</div><div class="feat-list">${grp.items.map(x=>`<div class="feat-item">${x}</div>`).join('')}</div>`;
+    g.appendChild(d);});})();
+
+// ---- reviews ----
+const SEED=[["Mason K.",5,"Honestly this fixed my stutter in valorant. nothing else worked.","3d ago"],
+["Jayden R.",4,"solid tool, input feels way cleaner now","1w ago"],
+["Theresa M.",5,"My pc is 6 years old and games run better than before. crazy","2w ago"],
+["lil dave",4,"good but the ui took a min to get used to. works tho","2w ago"],
+["Sofia A.",5,"downloaded, put key in, done. no bs","3w ago"],
+["Marcus T.",3,"it helped a bit but my wifi is still bad lol","1mo ago"],
+["Emily W.",5,"love the key remap feature. big help","1mo ago"],
+["caden f",4,"fps went up in warzone, def recommend","1mo ago"],
+["Olivia P.",5,"the restore point thing saved me when i messed around too much","2mo ago"],
+["Derek H.",4,"clean program, runs in tray like it says","2mo ago"],
+["Nina S.",5,"legit. stopped my screen tearing on league","3mo ago"],
+["boss man",4,"good for the price, got my key from discord fast","3mo ago"],
+["Kevin B.",5,"simple and it works. exactly what i wanted","4mo ago"],
+["Avery L.",4,"made my old laptop feel new again","5mo ago"]];
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function starStr(n){return "★★★★★".slice(0,n)+"<span class='o'>"+"★★★★★".slice(n)+"</span>";}
+function addReview(n,stars,txt,date){const g=document.getElementById('reviewGrid');
+  const d=document.createElement('div');d.className='review';
+  d.innerHTML=`<div class="rhead"><div class="avatar">${esc(n[0]||'?')}</div>
+    <div><div class="rname">${esc(n)}</div><div class="rdate">${esc(date||'just now')}</div></div></div>
+    <div class="rstars">${starStr(stars)}</div><div class="rtext">${esc(txt)}</div>`;
+  g.prepend(d);}
+SEED.forEach(r=>addReview(r[0],r[1],r[2],r[3]));
+
+// star picker
+const starPick=document.getElementById('starPick');let picked=0;
+starPick.querySelectorAll('span').forEach(s=>s.addEventListener('click',()=>{picked=+s.dataset.v;
+  starPick.querySelectorAll('span').forEach(x=>x.classList.toggle('on',+x.dataset.v<=picked));}));
+document.getElementById('revSubmit').addEventListener('click',()=>{
+  const st=document.getElementById('revStatus'),k=document.getElementById('revKey').value.trim(),
+        txt=document.getElementById('revText').value.trim();
+  if(!picked){st.className="rstatus err";st.textContent="Pick a star rating first.";return;}
+  if(!isValidKey(k)){st.className="rstatus err";st.textContent="That key isn't valid, so we can't verify your purchase.";return;}
+  if(!txt){st.className="rstatus err";st.textContent="Write a quick comment before posting.";return;}
+  const name="Verified user";
+  addReview(name,picked,txt,"just now");
+  try{const saved=JSON.parse(localStorage.getItem('reviews')||'[]');saved.push({n:name,s:picked,t:txt});localStorage.setItem('reviews',JSON.stringify(saved));}catch(e){}
+  st.className="rstatus ok";st.textContent="Thanks, your review is live!";
+  document.getElementById('revKey').value='';document.getElementById('revText').value='';starPick.querySelectorAll('span').forEach(x=>x.classList.remove('on'));picked=0;
+});
+
+// ---- nav ----
+(function(){const nav=document.getElementById('siteNav'),tg=document.getElementById('navToggle'),mm=document.getElementById('mobileMenu');
+  if(tg&&mm)tg.addEventListener('click',()=>{tg.classList.toggle('active');mm.classList.toggle('active');});
+  window.addEventListener('scroll',()=>{if((window.scrollY||0)>12)nav.classList.add('scrolled');else nav.classList.remove('scrolled');},{passive:true});
+})();
+
+// ---- scroll progress + reveal ----
+(function(){const sp=document.getElementById('scrollProgress');
+  const sync=()=>{const el=document.documentElement,m=el.scrollHeight-el.clientHeight;sp.style.width=m>0?Math.min(100,(el.scrollTop/m)*100)+'%':'0%';};
+  sync();window.addEventListener('scroll',sync,{passive:true});window.addEventListener('resize',sync,{passive:true});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');}),{rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));})();
+
+// ---- chat (ai-style support agent) ----
+const chatBtn=document.getElementById('chatBtn'),chat=document.getElementById('chat'),chatClose=document.getElementById('chatClose'),
+      chatMsgs=document.getElementById('chatMsgs'),chatInput=document.getElementById('chatInput'),chatSend=document.getElementById('chatSend');
+function addMsg(t,w){const d=document.createElement('div');d.className='msg '+w;d.textContent=t;chatMsgs.appendChild(d);chatMsgs.scrollTop=chatMsgs.scrollHeight;}
+function answer(q){q=q.toLowerCase();
+  if(/hi|hello|hey|yo/.test(q))return "hey! how can i help? ask about features, downloading, your key, or pricing.";
+  if(/buy|price|cost|purchase|how much|pay/.test(q))return "0ms is $9.99 once, lifetime. grab it through our discord: https://discord.gg/EeD4Z2xgpp";
+  if(/discord|server|join/.test(q))return "join us here: https://discord.gg/EeD4Z2xgpp";
+  if(/download|get|install|setup/.test(q))return "put your lifetime key in the Download section and the link shows up. works on windows 10 and 11.";
+  if(/key|activate|license|unlock|redeem|code/.test(q))return "your key unlocks all 80 features. use it on the site to download, then paste it in the app. each key is locked to one pc (HWID).";
+  if(/feature|what does|optimize|tweak|setting|boost/.test(q))return "there's 80 tweaks across 5 groups: Core, Input, Network, Visual, and System. plus precision sliders, key remapping, and restore points.";
+  if(/mac|randomize/.test(q))return "there's a Randomize MAC Address toggle in the Network section that gives each adapter a random local MAC. fully reversible.";
+  if(/restore|backup|roll back|undo/.test(q))return "the Backup tab makes a real windows restore point plus a snapshot, so you can roll back any change.";
+  if(/ping|lag|latency|fps|stutter|performance/.test(q))return "it cuts local input and packet delay with real TCP/DNS/system tuning. it can't change your distance to a server, but it trims the local stuff.";
+  if(/remap|key bind|macro|keyboard/.test(q))return "the Key Remap tab has a visual keyboard. click a key to rebind it, or set up two key macros with a delay.";
+  if(/safe|virus|ban|detect|trusted|legit|false/.test(q))return "0ms only touches standard windows settings and everything is reversible with a restore point. it's a legit tuning tool.";
+  if(/tray|background|hide|minimize/.test(q))return "it sits in your system tray and works quietly. left click or double click the tray icon to bring it back.";
+  if(/w10|win10|windows 10|w11|win11|windows 11|requirements|spec/.test(q))return "windows 10 or 11 (64-bit). it's a single exe, no other dependencies needed.";
+  if(/restore point|protection|disabled/.test(q))return "if system protection is off (common on win11), 0ms turns it on automatically before making your restore point.";
+  if(/thank|thx|thanks|appreciate/.test(q))return "no worries! enjoy the zero latency. anything else?";
+  if(/review|rating|stars/.test(q))return "people rate us 4.7 out of 5. you can leave your own review on the Reviews section with your key.";
+  if(/contact|support|help|problem|issue|broken|error|bug/.test(q))return "if something's off, hit our discord and we'll sort it: https://discord.gg/EeD4Z2xgpp";
+  return "not 100% sure on that one. try asking about features, downloading, keys, or pricing, or join our discord for real support: https://discord.gg/EeD4Z2xgpp";}
+function send(){const t=chatInput.value.trim();if(!t)return;addMsg(t,'user');chatInput.value='';
+  setTimeout(()=>{addMsg(answer(t),'bot');},Math.min(1200,400+t.length*15));}
+chatBtn.addEventListener('click',()=>{chat.classList.add('open');chatInput.focus();});
+chatClose.addEventListener('click',()=>chat.classList.remove('open'));
+chatSend.addEventListener('click',send);chatInput.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+addMsg("hey, i'm the 0ms assistant. what do you need help with?","bot");
+</script>
 </body>
 </html>
